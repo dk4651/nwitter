@@ -22,6 +22,7 @@ function App() {
       }else{
         setIsLoggedIn(false);
       }
+      console.log(isLoggedIn)
       setInit(true);}
       );
   }
