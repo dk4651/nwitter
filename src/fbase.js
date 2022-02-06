@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import * as firebase from "firebase/app";
 import {getAuth} from "firebase/auth"; //authentication을 쓰려면 선언을 해야한다 
 
 const firebaseConfig = {
@@ -12,4 +13,5 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+//export const firebaseInstance = firebase;
 export const authService = getAuth();
