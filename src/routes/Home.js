@@ -1,28 +1,39 @@
 import React, {useState, useEffect} from 'react';
 import { dbService } from 'fbase';
-import { addDoc, collection,getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs, onSnapshot, query, orderBy } from 'firebase/firestore';
+import NNweet from 'components/Nweet'
 
-const Home = () => {
+const Home = ({userObj}) => {
+    
+    //console.log(userObj)
     const [nweet,setNweet] = useState('');
     const [nweets, setNweets] = useState([]);
 
-    const getNweets = async() => {
-        const dbNweets = await getDocs(collection(dbService,'nweet'));
-        dbNweets.forEach((document) => {
-            console.log(document)
-            const nweetOj = {
-                ...document.data(),
-                id : document.id
-            };
-
-            setNweets(prev => [nweetOj,...prev]);
-        }
-        )
+    //const getNweets = async() => {
+    //    const dbNweets = await getDocs(collection(dbService,'nweet'));
+    //   dbNweets.forEach((document) => {
+    //        //console.log(document)
+    //        const nweetOj = {
+    //            ...document.data(),
+    //            id : document.id,
+    //            
+    //        };
+    
+    //        setNweets(prev => [nweetOj,...prev]);
+    //    }
+    //    )
         
-    }
+    //}
 
     useEffect(() =>{
-        getNweets();
+        //getNweets();
+        onSnapshot(collection(dbService,'nweet'),snapshot =>{
+        //    console.log(snapshot.docs)
+        const nweetArray = snapshot.docs.map((doc) => ({id:doc.id,...doc.data()}));
+        
+        setNweets(nweetArray);  
+        })
+        
 
     },[]);
 
@@ -30,8 +41,9 @@ const Home = () => {
         event.preventDefault();
         await addDoc(collection(dbService,'nweet'),{
 
-            Nweet : nweet,
-            CreatedAt : Date.now()
+            text : nweet,
+            CreatedAt : Date.now(),
+            creatorId : userObj.uid
         });
         setNweet('');
 
@@ -41,8 +53,8 @@ const Home = () => {
         const {target : {value}} = event;
         setNweet(value);
     }
-    //console.log(nweets)
-
+    //
+    
 return(
 
     <div>
@@ -53,10 +65,7 @@ return(
 
         <div>
             {nweets.map((nweet) => (
-                <div key = {nweet.id}>
-                    <h4>{nweet.Nweet}</h4>
-                </div>
-
+                <NNweet key = {nweet.id} nweetObj = {nweet} isOwner = {nweet.creatorId===userObj.uid} />
             ))}
         </div>
     </div>
