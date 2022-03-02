@@ -3,7 +3,7 @@ import { dbService } from 'fbase';
 import { addDoc, collection, getDocs, onSnapshot, query, orderBy } from 'firebase/firestore';
 import NNweet from 'components/Nweet'
 import {storageService} from 'fbase'
-import {ref, getStorage, uploadString} from 'firebase/storage'
+import {ref, uploadString} from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid';
 
 const Home = ({userObj}) => {
@@ -40,11 +40,12 @@ const Home = ({userObj}) => {
 
     },[]);
 
-    const onSubmit = async(event) => {
+    const onSubmit = async (event) => {
         event.preventDefault();
-        const fileRef = ref(storageService,`${userObj.uid}/${uuidv4}`)
-        const response = await uploadString(fileRef,attachment,'data_url')
-        console.log(response)
+        const fileRef = ref(storageService,`${userObj.uid}/${uuidv4()}`);
+        const response = await uploadString(fileRef,attachment,'data_url');
+        console.log(response);
+        
         // await addDoc(collection(dbService,'nweet'),{
 
         //     text : nweet,
@@ -62,22 +63,22 @@ const Home = ({userObj}) => {
     //
     
     const onFileChange = (event) => { 
-        console.log(event.target.files)
-        const {target:{files}} = event
-        const theFile = files[0]
+        //console.log(event.target.files)
+        const {target:{files}} = event;
+        const theFile = files[0];
         //console.log(theFile)
-        const reader = new FileReader()
+        const reader = new FileReader();
         reader.onloadend = (finishedEvent) =>{
             //console.log(finishedEvent)
             const{currentTarget : {result}} = finishedEvent
             setAttachment(result)
-        }
-        reader.readAsDataURL(theFile)
+        };
+        reader.readAsDataURL(theFile);
 
     }
 
     const onClearAttachment = () =>{
-        setAttachment('')
+        setAttachment('');
     }
 return(
 
