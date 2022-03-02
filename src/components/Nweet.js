@@ -4,13 +4,13 @@ import { dbService } from 'fbase';
 
 
 
-const NNweet = ({nweetObj,isOwner}) =>{
+const Nweet = ({nweetObj,isOwner}) =>{
     const [editing, setEditing] = useState(false);
     const [newNweet, setNewNweet] = useState(nweetObj.text)
     //console.log(nweetObj)
     
 
-    const onDeleteClick= async()=> {
+    const onDeleteClick= async()=> { 
         const ok = window.confirm('Are you sure to delte?')
         if(ok){
             await deleteDoc(doc(dbService,'nweet',`${nweetObj.id}`))
@@ -51,6 +51,7 @@ const NNweet = ({nweetObj,isOwner}) =>{
             : 
             <>
             <h4>{nweetObj.text}</h4>
+            {nweetObj.attachmentUrl && <img src = {nweetObj.attachmentUrl} width = '50px' heigt = '50px' />}
             {isOwner&&
             <>
             <button onClick={onDeleteClick}>Delete Nweet</button>
@@ -63,4 +64,4 @@ const NNweet = ({nweetObj,isOwner}) =>{
 
 };
 
-export default NNweet;
+export default Nweet;
