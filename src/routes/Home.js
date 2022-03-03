@@ -6,9 +6,10 @@ import {storageService} from 'fbase'
 import {ref, uploadString, getDownloadURL} from 'firebase/storage'
 import { v4 as uuidv4 } from 'uuid';
 
+
 const Home = ({userObj}) => {
     
-    //console.log(userObj)
+    //console.log(userObj.uid)
     const [nweet,setNweet] = useState('');
     const [nweets, setNweets] = useState([]);
     const [attachment, setAttachment] = useState('');
@@ -85,7 +86,6 @@ const Home = ({userObj}) => {
     }
 
 return(
-
     <div>
         <form onSubmit={onSubmit}>
             <input onChange={onChange} value = {nweet} type ='text' placeholder='whats your feeling now?' maxLength={120}></input>
